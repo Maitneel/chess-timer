@@ -17,8 +17,8 @@
 
   //取得した持ち時間をHTMLに反映
   if (timeLimit !== null) {
-    rightTimeLimit.innerText =('00' + timeLimit).slice(-2) + " : 00 : 00";
-    leftTimeLimit.innerText = ('00' + timeLimit).slice(-2) + " : 00 : 00";
+    rightTimeLimit.innerText =('00' + timeLimit).slice(-2) + " : 00 . 00";
+    leftTimeLimit.innerText = ('00' + timeLimit).slice(-2) + " : 00 . 00";
   }
 
 
@@ -32,7 +32,7 @@
       clearInterval(leftIntervalId);
     } else {
       leftRemainingTime -= 10;
-      leftTimeLimit.innerText= leftMinutes + " : " + leftSconds + " : " + leftLessSeconds;
+      leftTimeLimit.innerText= leftMinutes + " : " + leftSconds + " . " + leftLessSeconds;
     }
   }
 
@@ -46,7 +46,7 @@
       clearInterval(rightIntervalId);
     } else {
       rightRemainingTime -= 10;
-      rightTimeLimit.innerText = rightMinutes + " : " + rightSconds + " : " + rightLessSeconds;
+      rightTimeLimit.innerText = rightMinutes + " : " + rightSconds + " . " + rightLessSeconds;
     }
   }
 
@@ -77,15 +77,30 @@
     }
   };
 
+  //左側のキーが押されたか右側のキーが押されたかの判定
+  function whichDidPushed() {
+    //左手のセットポジションにある"b"以外のキーを押した時に"left"を返す
+    if (event.key ==='q' || event.key ==='w' || event.key ==='e' || event.key ==='r' || event.key ==='t' ||
+        event.key ==='a' || event.key ==='s' || event.key ==='d' || event.key ==='f' || event.key ==='g' ||
+        event.key ==='z' || event.key ==='x' || event.key ==='c' || event.key ==='v'
+       ) {
+      return 'left';
+    //右手のセットポジションのアルファベットと記号(";"と","と".")を押した時に"right"を返す
+    } else if (event.key ==='y' || event.key ==='u' || event.key ==='i' || event.key ==='o' || event.key ==='p' ||
+               event.key ==='h' || event.key ==='j' || event.key ==='k' || event.key ==='l' || event.key ===';' ||
+               event.key ==='n' || event.key ==='m' || event.key ===',' || event.key ==='.'
+              ) {
+      return 'right';
+    }
+  }
+
   //キーを押した時にボタンを押した処理を実行させる
   document.body.onkeydown = (event) => {
-
-    //左手のセットポジションにある"b"以外のキーを押した時に"leftButton"を実行する
-    if (event.key ==='q' || event.key ==='w' || event.key ==='e'|| event.key ==='r'|| event.key ==='t'|| event.key ==='a'|| event.key ==='s'|| event.key ==='d'|| event.key ==='f'|| event.key ==='g'|| event.key ==='z'|| event.key ==='x'|| event.key ==='c'|| event.key ==='v') {
+    //whichDidPushed関数を実行し，返り値が"left"ならlefghtbutton関数を実行し，"right"ならrightButton関数を実行する
+    let which = whichDidPushed();
+    if (which === "left") {
       leftButton.onclick();
-
-   //右手のセットポジションのアルファベットと記号(";"と","と".")を押した時に"rightButton"を実行する
-    } else if (event.key ==='y'|| event.key ==='u'|| event.key ==='i'|| event.key ==='o'|| event.key ==='p'|| event.key ==='h'|| event.key ==='j'|| event.key ==='k'|| event.key ==='l'|| event.key ===';'|| event.key ==='n'|| event.key ==='m'|| event.key ===','|| event.key ==='.') {
+    } else if (which === "right") {
       rightButton.onclick();
     }
   }
